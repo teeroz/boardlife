@@ -88,6 +88,19 @@ git pull
 docker-compose up -d --build
 ```
 
+## 환경 변수 설정
+
+기본 환경 변수는 docker-compose.yml 파일에 설정되어 있습니다. 필요한 경우 다음과 같이 docker-compose.yml 파일에서 수정할 수 있습니다:
+
+```yaml
+services:
+  boardlife:
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=https://boardlife.teeroz.net
+      - NEXT_TELEMETRY_DISABLED=1
+```
+
 ## 문제 해결
 
 ### Nginx 설정 테스트
