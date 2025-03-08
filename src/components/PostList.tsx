@@ -293,7 +293,27 @@ export default function PostList({ initialPosts }: PostListProps) {
                   )}
                 </td>
                 <td className="pl-4 pr-2 py-4 whitespace-nowrap text-center category-column">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                  <span
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      post.category === "자게"
+                        ? "bg-red-200 text-red-900"
+                        : post.category === "문의"
+                        ? "bg-purple-200 text-purple-900"
+                        : post.category === "후기"
+                        ? "bg-blue-200 text-blue-900"
+                        : post.category === "자료"
+                        ? "bg-green-200 text-green-900"
+                        : post.category === "꿀팁"
+                        ? "bg-indigo-100 text-indigo-800"
+                        : post.category === "모임"
+                        ? "bg-orange-100 text-orange-800"
+                        : post.category === "구인"
+                        ? "bg-teal-100 text-teal-800"
+                        : post.category === "구성"
+                        ? "bg-rose-100 text-rose-800"
+                        : "bg-blue-100 text-blue-800"
+                    }`}
+                  >
                     {post.category}
                   </span>
                 </td>
