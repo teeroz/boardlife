@@ -2,7 +2,7 @@
 
 import { Post } from "@/types/board";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 interface PostListProps {
   initialPosts: Post[];
@@ -14,10 +14,17 @@ export default function PostList({ initialPosts }: PostListProps) {
   const [loading, setLoading] = useState(false);
   const [visitedLinks, setVisitedLinks] = useState<Set<string>>(new Set());
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const loadingRef = useRef<HTMLDivElement>(null);
 
-  // 모바일 여부 감지
+  // 컴포넌트 마운트 상태 관리
   useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  // 모바일 여부 감지 (useLayoutEffect로 변경)
+  useLayoutEffect(() => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -97,12 +104,69 @@ export default function PostList({ initialPosts }: PostListProps) {
     return () => observer.disconnect();
   }, [loadMorePosts]);
 
+  // CSS와 레이아웃 최적화를 위한 스타일
+  const globalStyles = `
+    .post-link:visited {
+      color: #6b7280 !important;
+    }
+    .thumbnail-column {
+      width: 65px !important;
+      min-width: 65px !important;
+      max-width: 65px !important;
+    }
+    .thumbnail-img {
+      width: 45px !important;
+      height: 45px !important;
+      max-width: 45px !important;
+      max-height: 45px !important;
+      min-width: 45px !important;
+      min-height: 45px !important;
+      object-fit: cover !important;
+      display: block !important;
+      margin: 0 auto !important;
+    }
+    .post-row {
+      height: 70px !important;
+    }
+    .thumbnail-container {
+      width: 45px;
+      height: 45px;
+      margin: 0 auto;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .author-column {
+      width: 100px !important;
+      max-width: 100px !important;
+    }
+    .date-column {
+      width: 100px !important;
+      max-width: 100px !important;
+    }
+    .number-column {
+      width: 70px !important;
+      max-width: 70px !important;
+    }
+    .category-column {
+      width: 80px !important;
+      max-width: 80px !important;
+    }
+    /* 레이아웃 시프트 방지를 위한 추가 스타일 */
+    .post-container {
+      min-height: 500px;
+    }
+    .post-card {
+      min-height: 120px;
+    }
+  `;
+
   // 모바일 카드 레이아웃 렌더링
   const renderMobileCards = () => {
     return (
       <div className="grid grid-cols-1 gap-4">
         {posts.map((post: Post) => (
-          <div key={post.id} className="bg-white rounded-lg shadow p-4">
+          <div key={post.id} className="bg-white rounded-lg shadow p-4 post-card">
             <div className="flex mb-3">
               {post.thumbnailUrl && (
                 <div className="mr-3 flex-shrink-0 w-12 h-12 relative overflow-hidden rounded border border-gray-200 shadow-sm">
@@ -174,54 +238,9 @@ export default function PostList({ initialPosts }: PostListProps) {
   const renderDesktopTable = () => {
     return (
       <div className="overflow-x-auto">
-        <style jsx global>{`
-          .post-link:visited {
-            color: #6b7280 !important;
-          }
-          .thumbnail-column {
-            width: 65px !important;
-            min-width: 65px !important;
-            max-width: 65px !important;
-          }
-          .thumbnail-img {
-            width: 45px !important;
-            height: 45px !important;
-            max-width: 45px !important;
-            max-height: 45px !important;
-            min-width: 45px !important;
-            min-height: 45px !important;
-            object-fit: cover !important;
-            display: block !important;
-            margin: 0 auto !important;
-          }
-          .post-row {
-            height: 70px !important;
-          }
-          .thumbnail-container {
-            width: 45px;
-            height: 45px;
-            margin: 0 auto;
-            display: block;
-            position: relative;
-            overflow: hidden;
-          }
-          .author-column {
-            width: 100px !important;
-            max-width: 100px !important;
-          }
-          .date-column {
-            width: 100px !important;
-            max-width: 100px !important;
-          }
-          .number-column {
-            width: 70px !important;
-            max-width: 70px !important;
-          }
-          .category-column {
-            width: 80px !important;
-            max-width: 80px !important;
-          }
-        `}</style>
+        <style jsx global>
+          {globalStyles}
+        </style>
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
@@ -314,11 +333,11 @@ export default function PostList({ initialPosts }: PostListProps) {
   };
 
   return (
-    <>
-      {isMobile ? renderMobileCards() : renderDesktopTable()}
+    <div className="post-container">
+      {mounted && (isMobile ? renderMobileCards() : renderDesktopTable())}
       <div ref={loadingRef} className="py-4 text-center">
         {loading && <div className="text-gray-500">게시물을 불러오는 중...</div>}
       </div>
-    </>
+    </div>
   );
 }
