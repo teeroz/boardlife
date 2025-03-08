@@ -55,7 +55,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx/certs/boardlif
 docker-compose up -d --build
 ```
 
-이 명령은 Boardlife 애플리케이션과 Nginx 서버를 빌드하고 백그라운드에서 실행합니다.
+이 명령은 Boardlife 애플리케이션(boardlife-nextjs)과 Nginx 서버(boardlife-nginx)를 빌드하고 백그라운드에서 실행합니다.
 
 ### 4. 서비스 확인
 
@@ -66,13 +66,27 @@ docker-compose up -d --build
 ### 로그 확인
 
 ```bash
+# 모든 서비스의 로그 확인
 docker-compose logs -f
+
+# Next.js 애플리케이션 로그만 확인
+docker-compose logs -f boardlife-nextjs
+
+# Nginx 로그만 확인
+docker-compose logs -f boardlife-nginx
 ```
 
 ### 서비스 재시작
 
 ```bash
+# 모든 서비스 재시작
 docker-compose restart
+
+# Next.js 애플리케이션만 재시작
+docker-compose restart boardlife-nextjs
+
+# Nginx만 재시작
+docker-compose restart boardlife-nginx
 ```
 
 ### 컨테이너 중지
@@ -94,7 +108,7 @@ docker-compose up -d --build
 
 ```yaml
 services:
-  boardlife:
+  boardlife-nextjs:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://boardlife.teeroz.net
@@ -106,7 +120,7 @@ services:
 ### Nginx 설정 테스트
 
 ```bash
-docker-compose exec nginx nginx -t
+docker-compose exec boardlife-nginx nginx -t
 ```
 
 ### 인증서 갱신
@@ -122,5 +136,5 @@ sudo certbot renew
 ```bash
 sudo cp /etc/letsencrypt/live/boardlife.teeroz.net/fullchain.pem nginx/certs/boardlife.teeroz.net.crt
 sudo cp /etc/letsencrypt/live/boardlife.teeroz.net/privkey.pem nginx/certs/boardlife.teeroz.net.key
-docker-compose restart nginx
+docker-compose restart boardlife-nginx
 ```
