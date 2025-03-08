@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  boardlife:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env.docker
+    networks:
+      - boardlife_network
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./.next:/app/.next
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - boardlife_network
+    depends_on:
+      - boardlife
+
+networks:
+  boardlife_network:
+    driver: bridge 
