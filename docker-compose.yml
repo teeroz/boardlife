@@ -10,8 +10,8 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=production
-    env_file:
-      - .env.docker
+      - NEXT_PUBLIC_API_URL=https://boardlife.teeroz.net
+      - NEXT_TELEMETRY_DISABLED=1
     networks:
       - boardlife_network
     volumes:
