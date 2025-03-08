@@ -110,6 +110,7 @@ export default function PostList({ initialPosts }: PostListProps) {
           margin: 0 auto;
           display: block;
           position: relative;
+          overflow: hidden;
         }
         .author-column {
           width: 100px !important;
@@ -166,8 +167,12 @@ export default function PostList({ initialPosts }: PostListProps) {
                       alt="게임 썸네일"
                       width={45}
                       height={45}
-                      className="rounded border border-gray-200 shadow-sm"
-                      style={{ objectFit: "cover" }}
+                      className="rounded border border-gray-200 shadow-sm thumbnail-img"
+                      style={{
+                        objectFit: "cover",
+                        width: "45px",
+                        height: "45px",
+                      }}
                       onError={() => {
                         const img = document.querySelector(
                           `img[alt="게임 썸네일"][src="${post.thumbnailUrl}"]`
