@@ -15,9 +15,6 @@ services:
     networks:
       - network
       - infra_infra-local
-    volumes:
-      - ./node_modules:/app/node_modules
-      - ./.next:/app/.next
 
 # nginx:
 #   image: nginx:alpine
