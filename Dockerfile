@@ -7,8 +7,9 @@ WORKDIR /app
 # Copy package.json only
 COPY package.json ./
 
-# Use npm only
-RUN npm install
+# Update npm to latest version and then install dependencies
+RUN npm install -g npm@latest && \
+  npm install --quiet
 
 # Rebuild the source code only when needed
 FROM base AS builder
