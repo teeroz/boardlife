@@ -2,7 +2,8 @@ import PostList from "@/components/PostList";
 import "dayjs/locale/ko";
 
 async function getPosts() {
-  const response = await fetch("http://localhost:3000/api/posts", { cache: "no-store" });
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  const response = await fetch(`${apiUrl}/api/posts`, { cache: "no-store" });
   if (!response.ok) {
     throw new Error("게시물을 가져오는데 실패했습니다.");
   }
