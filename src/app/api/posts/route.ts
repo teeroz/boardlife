@@ -21,6 +21,12 @@ export async function GET() {
       const $element = $(element);
 
       const category = $element.find(".category_icon").text().trim();
+
+      // "스폰" 카테고리 제외
+      if (category === "스폰") {
+        return;
+      }
+
       const title = $element.find(".title.new-ellip").text().trim();
       const author = $element.find(".nick").text().trim();
       const createdAt = $element.find(".time").text().trim();
@@ -29,7 +35,7 @@ export async function GET() {
       const link = "https://boardlife.co.kr" + $element.attr("href");
 
       posts.push({
-        id: index + 1,
+        id: posts.length + 1, // index 대신 posts.length를 사용하여 연속된 번호 부여
         category,
         title,
         author,
