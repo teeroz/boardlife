@@ -1,5 +1,5 @@
 export interface Post {
-  id: number;
+  id: string;
   category: string;
   title: string;
   author: string;
@@ -12,4 +12,6 @@ export interface Post {
 
 export interface BoardListResponse {
   posts: Post[];
+  page: number;
+  isLastPage: boolean;
 }

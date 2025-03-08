@@ -4,9 +4,12 @@ import * as cheerio from "cheerio";
 import iconv from "iconv-lite";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const response = await axios.get("https://boardlife.co.kr/board/new/전체/1", {
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page") || "1";
+
+    const response = await axios.get(`https://boardlife.co.kr/board/new/전체/${page}`, {
       responseType: "arraybuffer",
       responseEncoding: "binary",
     });
@@ -35,19 +38,26 @@ export async function GET() {
       const link = "https://boardlife.co.kr" + $element.attr("href");
 
       posts.push({
-        id: posts.length + 1, // index 대신 posts.length를 사용하여 연속된 번호 부여
+        id: `${page}-${posts.length + 1}`, // 페이지 번호를 포함한 고유 ID
         category,
         title,
         author,
         createdAt,
-        views: comments, // 실제 조회수 데이터가 없어서 임시로 댓글 수로 대체
+        views: comments,
         likes,
         comments,
         link,
       });
     });
 
-    return NextResponse.json({ posts });
+    // 마지막 페이지 여부 확인
+    const isLastPage = $(".pagination .page-link").length === 0 && false;
+
+    return NextResponse.json({
+      posts,
+      page: parseInt(page),
+      isLastPage,
+    });
   } catch (error) {
     console.error("Error fetching posts:", error);
     return NextResponse.json({ error: "게시물을 가져오는 중 오류가 발생했습니다." }, { status: 500 });
