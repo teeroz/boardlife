@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   nextjs:
@@ -7,8 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    expose:
-      - '3001'
+    ports:
+      - "3001:3001"
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://boardlife.teeroz.net
@@ -37,4 +37,4 @@ networks:
   network:
     driver: bridge
   infra_infra-local:
-    external: true 
+    external: true
