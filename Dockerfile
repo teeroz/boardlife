@@ -4,12 +4,12 @@ FROM node:22-alpine AS base
 FROM base AS deps
 WORKDIR /app
 
-# Copy package.json only
-COPY package.json ./
+# Copy package.json and .npmrc file
+COPY package.json .npmrc ./
 
-# Update npm to latest version and then install dependencies
-RUN npm install -g npm@latest && \
-  npm install --quiet
+# Update npm to latest version and disable update notifications
+RUN npm install -g npm@latest --no-update-notifier --quiet && \
+  npm install --no-update-notifier --quiet
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -21,7 +21,7 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN npm run build
+RUN npm run build --no-update-notifier --quiet
 
 # Production image, copy all the files and run next
 FROM base AS runner
