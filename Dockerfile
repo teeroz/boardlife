@@ -1,53 +1,49 @@
-# syntax=docker/dockerfile:1.4
 FROM node:22-alpine AS base
 
-# 의존성 설치 레이어
+# Install dependencies only when needed
 FROM base AS deps
 WORKDIR /app
 
-# package.json 및 lock 파일만 복사하여 의존성 캐싱 개선
-COPY package.json package-lock.json* .npmrc ./
+# Copy package.json and .npmrc file
+COPY package.json .npmrc ./
 
-# npm ci를 사용하여 더 빠르고 안정적인 설치
-RUN --mount=type=cache,target=/root/.npm \
-  npm ci --omit=dev --no-audit --prefer-offline
+# Update npm to latest version and disable update notifications
+RUN npm install -g npm@latest --no-update-notifier --quiet && \
+  npm install --no-update-notifier --quiet
 
-# 소스 코드 빌드 레이어
+# Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
-
-# 의존성 복사
 COPY --from=deps /app/node_modules ./node_modules
-
-# 소스 코드 복사
 COPY . .
 
-# 텔레메트리 비활성화
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# 빌드 캐싱 활용
-RUN --mount=type=cache,target=/root/.npm \
-  npm run build
+RUN npm run build --no-update-notifier --quiet
 
-# 런타임 이미지
+# Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
-ENV PORT 3001
 
-# 시스템 사용자 생성 (명령 결합으로 레이어 감소)
-RUN addgroup --system --gid 1001 nodejs && \
-  adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# 필요한 파일만 복사
 COPY --from=builder /app/public ./public
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 3001
+
+ENV PORT 3001
 
 CMD ["node", "server.js"] 
