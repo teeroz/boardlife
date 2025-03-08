@@ -37,6 +37,17 @@ export async function GET(request: Request) {
       const views = parseInt($element.find(".comment .data").text().trim()) || 0;
       const link = "https://boardlife.co.kr" + $element.attr("href")?.replace(/&pg=\d+/, "");
 
+      // 썸네일 이미지 URL 추출
+      let thumbnailUrl = "";
+      const thumbImg = $element.find(".board-game-thumb img");
+      if (thumbImg.length > 0) {
+        thumbnailUrl = thumbImg.attr("data-src") || thumbImg.attr("src") || "";
+        // 상대 경로인 경우 절대 경로로 변환
+        if (thumbnailUrl && !thumbnailUrl.startsWith("http")) {
+          thumbnailUrl = "https://boardlife.co.kr" + thumbnailUrl;
+        }
+      }
+
       // 댓글 수 추출
       let comments = 0;
       const commentCountText = $element.find(".comment-count").text().trim();
@@ -57,6 +68,7 @@ export async function GET(request: Request) {
         likes,
         comments,
         link,
+        thumbnailUrl,
       });
     });
 

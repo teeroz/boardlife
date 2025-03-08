@@ -56,12 +56,40 @@ export default function PostList({ initialPosts }: PostListProps) {
         .post-link:visited {
           color: #6b7280 !important;
         }
+        .thumbnail-column {
+          width: 65px !important;
+          min-width: 65px !important;
+          max-width: 65px !important;
+        }
+        .thumbnail-img {
+          width: 45px !important;
+          height: 45px !important;
+          max-width: 45px !important;
+          max-height: 45px !important;
+          min-width: 45px !important;
+          min-height: 45px !important;
+          object-fit: cover !important;
+          display: block !important;
+          margin: 0 auto !important;
+        }
+        .post-row {
+          height: 70px !important;
+        }
+        .thumbnail-container {
+          width: 45px;
+          height: 45px;
+          margin: 0 auto;
+          display: block;
+        }
       `}</style>
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               카테고리
+            </th>
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider thumbnail-column">
+              썸네일
             </th>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               제목
@@ -82,11 +110,28 @@ export default function PostList({ initialPosts }: PostListProps) {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {posts.map((post: Post) => (
-            <tr key={post.id} className="hover:bg-gray-50">
+            <tr key={post.id} className="hover:bg-gray-50 post-row">
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                   {post.category}
                 </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-center thumbnail-column">
+                <div className="thumbnail-container">
+                  {post.thumbnailUrl ? (
+                    <img
+                      src={post.thumbnailUrl}
+                      alt="게임 썸네일"
+                      className="thumbnail-img rounded border border-gray-200 shadow-sm"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <div className="thumbnail-img rounded border border-gray-200 bg-gray-100"></div>
+                  )}
+                </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <a href={post.link} className="post-link text-blue-600 hover:text-blue-900">

@@ -8,6 +8,7 @@ export interface Post {
   likes: number;
   comments: number;
   link: string;
+  thumbnailUrl: string;
 }
 
 export interface BoardListResponse {
