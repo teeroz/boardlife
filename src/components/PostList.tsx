@@ -289,19 +289,12 @@ export default function PostList({ initialPosts }: PostListProps) {
                     rel="noopener noreferrer"
                     onClick={() => handleLinkClick(post.link)}
                   >
-                    <span
-                      className={`text-xs font-semibold mr-1 ${
-                        visitedLinks.has(post.link) ? "text-gray-400" : "text-blue-600"
-                      }`}
-                    >
-                      [{post.category}]
-                    </span>
                     {post.title}
                     {post.comments > 0 && <span className="ml-2 text-sm">[{post.comments}]</span>}
                   </a>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center author-column">
-                  {post.author}
+                  <div className="truncate max-w-[100px] mx-auto">{post.author}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center date-column">
                   {post.createdAt}
