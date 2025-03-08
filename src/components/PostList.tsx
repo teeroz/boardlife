@@ -91,7 +91,7 @@ export default function PostList({ initialPosts }: PostListProps) {
               <td className="px-6 py-4 whitespace-nowrap">
                 <a href={post.link} className="post-link text-blue-600 hover:text-blue-900">
                   {post.title}
-                  {post.comments > 0 && <span className="ml-2 text-gray-500 text-sm">[{post.comments}]</span>}
+                  {post.comments > 0 && <span className="ml-2 text-sm">[{post.comments}]</span>}
                 </a>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.author}</td>
