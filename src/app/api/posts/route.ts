@@ -35,7 +35,7 @@ export async function GET(request: Request) {
       const createdAt = $element.find(".time").text().trim();
       const likes = parseInt($element.find(".like .data").text().trim()) || 0;
       const comments = parseInt($element.find(".comment .data").text().trim()) || 0;
-      const link = "https://boardlife.co.kr" + $element.attr("href");
+      const link = "https://boardlife.co.kr" + $element.attr("href")?.replace(/&pg=\d+/, '');
 
       posts.push({
         id: `${page}-${posts.length + 1}`,

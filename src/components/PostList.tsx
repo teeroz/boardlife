@@ -52,6 +52,11 @@ export default function PostList({ initialPosts }: PostListProps) {
 
   return (
     <div className="overflow-x-auto">
+      <style jsx global>{`
+        .post-link:visited {
+          color: #6b7280 !important;
+        }
+      `}</style>
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
@@ -84,12 +89,7 @@ export default function PostList({ initialPosts }: PostListProps) {
                 </span>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <a
-                  href={post.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-900"
-                >
+                <a href={post.link} className="post-link text-blue-600 hover:text-blue-900">
                   {post.title}
                   {post.comments > 0 && <span className="ml-2 text-gray-500 text-sm">[{post.comments}]</span>}
                 </a>
