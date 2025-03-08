@@ -1,6 +1,6 @@
-# Boardlife 도커 배포 가이드 (기존 Nginx 활용)
+# 도커 배포 가이드 (기존 Nginx 활용)
 
-이 문서는 Boardlife 애플리케이션을 Docker를 사용하여 `boardlife.teeroz.net` 도메인에 배포하는 방법을 설명합니다. 이 가이드는 서버에 이미 실행 중인 Nginx를 활용하는 방법을 설명합니다.
+이 문서는 애플리케이션을 Docker를 사용하여 `boardlife.teeroz.net` 도메인에 배포하는 방법을 설명합니다. 이 가이드는 서버에 이미 실행 중인 Nginx를 활용하는 방법을 설명합니다.
 
 ## 사전 요구사항
 
@@ -8,7 +8,7 @@
 - 서버에 이미 실행 중인 Nginx
 - boardlife.teeroz.net을 가리키는 도메인
 - SSL 인증서 (Let's Encrypt 사용 권장)
-- 'infra-local' Docker 네트워크 (기존 Nginx가 사용 중인 네트워크)
+- 'infra_infra-local' Docker 네트워크 (기존 Nginx가 사용 중인 네트워크)
 
 ## 배포 단계
 
@@ -37,19 +37,19 @@ sudo systemctl reload nginx  # 또는 적절한 Nginx 재시작 명령어
 docker-compose -p boardlife up -d --build
 ```
 
-이 명령은 Boardlife Next.js 애플리케이션(boardlife-nextjs)을 빌드하고 백그라운드에서 실행합니다.
+이 명령은 Next.js 애플리케이션(nextjs)을 빌드하고 백그라운드에서 실행합니다.
 
 ### 4. Docker 네트워크 연결 확인
 
-만약 새로 생성된 컨테이너가 'infra-local' 네트워크에 자동으로 연결되지 않은 경우:
+만약 새로 생성된 컨테이너가 'infra_infra-local' 네트워크에 자동으로 연결되지 않은 경우:
 
 ```bash
 # 컨테이너 이름은 프로젝트 이름에 따라 다를 수 있습니다
-docker network connect infra-local boardlife_boardlife-nextjs_1
+docker network connect infra_infra-local boardlife_nextjs_1
 
 # 또는 실제 컨테이너 이름 확인 후 연결
 docker ps
-docker network connect infra-local <컨테이너_이름>
+docker network connect infra_infra-local <컨테이너_이름>
 ```
 
 ### 5. 서비스 확인
@@ -62,7 +62,7 @@ docker network connect infra-local <컨테이너_이름>
 
 ```bash
 # 프로젝트 이름 지정
-docker-compose -p boardlife logs -f boardlife-nextjs
+docker-compose -p boardlife logs -f nextjs
 
 # 또는 컨테이너 ID/이름으로 직접 확인
 docker logs <컨테이너_이름>
@@ -72,7 +72,7 @@ docker logs <컨테이너_이름>
 
 ```bash
 # 프로젝트 이름 지정
-docker-compose -p boardlife restart boardlife-nextjs
+docker-compose -p boardlife restart nextjs
 ```
 
 ### 컨테이너 중지
@@ -95,7 +95,7 @@ docker-compose -p boardlife up -d --build
 
 ```yaml
 services:
-  boardlife-nextjs:
+  nextjs:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://boardlife.teeroz.net
@@ -111,7 +111,7 @@ services:
 docker network ls
 
 # 컨테이너 네트워크 연결 확인
-docker network inspect infra-local
+docker network inspect infra_infra-local
 ```
 
 ### 컨테이너 상태 확인
@@ -125,7 +125,7 @@ docker logs <컨테이너_이름>
 
 ```bash
 # 필요한 경우 네트워크에 수동으로 연결
-docker network connect infra-local <컨테이너_이름>
+docker network connect infra_infra-local <컨테이너_이름>
 ```
 
 ### Docker Compose 버전 확인
