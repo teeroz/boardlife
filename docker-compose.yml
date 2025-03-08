@@ -1,39 +1,45 @@
 version: '3'
 
+name: boardlife
+
 services:
   boardlife-nextjs:
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - '3000:3000'
+    expose:
+      - '3001'
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=https://boardlife.teeroz.net
       - NEXT_TELEMETRY_DISABLED=1
     networks:
       - boardlife_network
+      - infra-local
     volumes:
       - ./node_modules:/app/node_modules
       - ./.next:/app/.next
 
-  boardlife-nginx:
-    image: nginx:alpine
-    restart: always
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/certs:/etc/nginx/certs
-      - ./nginx/logs:/var/log/nginx
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-    networks:
-      - boardlife_network
-    depends_on:
-      - boardlife-nextjs
+# boardlife-nginx:
+#   image: nginx:alpine
+#   restart: always
+#   ports:
+#     - '80:80'
+#     - '443:443'
+#   volumes:
+#     - ./nginx/conf.d:/etc/nginx/conf.d
+#     - ./nginx/certs:/etc/nginx/certs
+#     - ./nginx/logs:/var/log/nginx
+#     - /etc/letsencrypt:/etc/letsencrypt:ro
+#   networks:
+#     - boardlife_network
+#   depends_on:
+#     - boardlife-nextjs
 
 networks:
   boardlife_network:
-    driver: bridge 
+    name: boardlife_network
+    driver: bridge
+  infra-local:
+    external: true 
