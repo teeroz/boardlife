@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  boardlife-nextjs:
+  nextjs:
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,13 +13,13 @@ services:
       - NEXT_PUBLIC_API_URL=https://boardlife.teeroz.net
       - NEXT_TELEMETRY_DISABLED=1
     networks:
-      - boardlife_network
+      - network
       - infra_infra-local
     volumes:
       - ./node_modules:/app/node_modules
       - ./.next:/app/.next
 
-# boardlife-nginx:
+# nginx:
 #   image: nginx:alpine
 #   restart: always
 #   ports:
@@ -31,12 +31,12 @@ services:
 #     - ./nginx/logs:/var/log/nginx
 #     - /etc/letsencrypt:/etc/letsencrypt:ro
 #   networks:
-#     - boardlife_network
+#     - network
 #   depends_on:
-#     - boardlife-nextjs
+#     - nextjs
 
 networks:
-  boardlife_network:
+  network:
     driver: bridge
   infra_infra-local:
     external: true 
