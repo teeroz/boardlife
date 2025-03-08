@@ -1,12 +1,17 @@
 import { Post } from "@/types/board";
 import axios from "axios";
 import * as cheerio from "cheerio";
+import iconv from "iconv-lite";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const response = await axios.get("https://boardlife.co.kr/board/new/전체/1");
-    const html = response.data;
+    const response = await axios.get("https://boardlife.co.kr/board/new/전체/1", {
+      responseType: "arraybuffer",
+      responseEncoding: "binary",
+    });
+
+    const html = iconv.decode(Buffer.from(response.data), "euc-kr");
     const $ = cheerio.load(html);
 
     const posts: Post[] = [];
