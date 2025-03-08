@@ -76,7 +76,7 @@ export default function PostList({ initialPosts }: PostListProps) {
               좋아요
             </th>
             <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-              댓글
+              조회수
             </th>
           </tr>
         </thead>
@@ -97,7 +97,7 @@ export default function PostList({ initialPosts }: PostListProps) {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.author}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.createdAt}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{post.likes}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{post.comments}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{post.views}</td>
             </tr>
           ))}
         </tbody>

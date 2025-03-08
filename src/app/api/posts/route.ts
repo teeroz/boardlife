@@ -34,8 +34,18 @@ export async function GET(request: Request) {
       const author = $element.find(".nick").text().trim();
       const createdAt = $element.find(".time").text().trim();
       const likes = parseInt($element.find(".like .data").text().trim()) || 0;
-      const comments = parseInt($element.find(".comment .data").text().trim()) || 0;
-      const link = "https://boardlife.co.kr" + $element.attr("href")?.replace(/&pg=\d+/, '');
+      const views = parseInt($element.find(".comment .data").text().trim()) || 0;
+      const link = "https://boardlife.co.kr" + $element.attr("href")?.replace(/&pg=\d+/, "");
+
+      // 댓글 수 추출
+      let comments = 0;
+      const commentCountText = $element.find(".comment-count").text().trim();
+      if (commentCountText) {
+        const commentMatch = commentCountText.match(/\[(\d+)\]/);
+        if (commentMatch) {
+          comments = parseInt(commentMatch[1]);
+        }
+      }
 
       posts.push({
         id: `${page}-${posts.length + 1}`,
@@ -43,7 +53,7 @@ export async function GET(request: Request) {
         title,
         author,
         createdAt,
-        views: comments,
+        views,
         likes,
         comments,
         link,
