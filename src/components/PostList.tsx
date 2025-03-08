@@ -9,38 +9,32 @@ interface PostListProps {
 
 export default function PostList({ initialPosts }: PostListProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const observerRef = useRef<IntersectionObserver>();
   const loadingRef = useRef<HTMLDivElement>(null);
 
   const loadMorePosts = async () => {
-    if (loading || !hasMore) return;
+    if (loading) return;
 
     try {
       setLoading(true);
-      const nextPage = page + 1;
+      const nextPage = currentPage + 1;
       const response = await fetch(`/api/posts?page=${nextPage}`);
       const data = await response.json();
 
-      if (data.posts.length === 0 || data.isLastPage) {
-        setHasMore(false);
-      } else {
-        setPosts((prev) => [...prev, ...data.posts]);
-        setPage(nextPage);
+      if (data.posts.length > 0) {
+        setPosts((prevPosts) => [...prevPosts, ...data.posts]);
+        setCurrentPage(nextPage);
       }
     } catch (error) {
-      console.error("Error loading more posts:", error);
+      console.error("게시물을 불러오는 중 오류가 발생했습니다:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!loadingRef.current) return;
-
-    observerRef.current = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
           loadMorePosts();
@@ -49,14 +43,12 @@ export default function PostList({ initialPosts }: PostListProps) {
       { threshold: 1.0 }
     );
 
-    observerRef.current.observe(loadingRef.current);
+    if (loadingRef.current) {
+      observer.observe(loadingRef.current);
+    }
 
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [page, loading, hasMore]);
+    return () => observer.disconnect();
+  }, [currentPage, loading]);
 
   return (
     <div className="overflow-x-auto">
@@ -110,10 +102,8 @@ export default function PostList({ initialPosts }: PostListProps) {
         </tbody>
       </table>
 
-      {/* 로딩 인디케이터 */}
       <div ref={loadingRef} className="py-4 text-center">
         {loading && <div className="text-gray-500">게시물을 불러오는 중...</div>}
-        {!hasMore && <div className="text-gray-500">마지막 페이지입니다.</div>}
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export async function GET(request: Request) {
       const link = "https://boardlife.co.kr" + $element.attr("href");
 
       posts.push({
-        id: `${page}-${posts.length + 1}`, // 페이지 번호를 포함한 고유 ID
+        id: `${page}-${posts.length + 1}`,
         category,
         title,
         author,
@@ -50,13 +50,9 @@ export async function GET(request: Request) {
       });
     });
 
-    // 마지막 페이지 여부 확인
-    const isLastPage = $(".pagination .page-link").length === 0 && false;
-
     return NextResponse.json({
       posts,
       page: parseInt(page),
-      isLastPage,
     });
   } catch (error) {
     console.error("Error fetching posts:", error);

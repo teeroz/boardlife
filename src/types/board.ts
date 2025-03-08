@@ -13,5 +13,4 @@ export interface Post {
 export interface BoardListResponse {
   posts: Post[];
   page: number;
-  isLastPage: boolean;
 }
