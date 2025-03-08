@@ -1,5 +1,6 @@
+import { Post } from "@/types/board";
 import axios from "axios";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -8,23 +9,30 @@ export async function GET() {
     const html = response.data;
     const $ = cheerio.load(html);
 
-    const posts = [];
+    const posts: Post[] = [];
 
     // 게시물 목록을 파싱
-    $(".board-list-item").each((index, element) => {
-      const title = $(element).find(".board-list-title").text().trim();
-      const author = $(element).find(".board-list-user").text().trim();
-      const date = $(element).find(".board-list-date").text().trim();
-      const views = $(element).find(".board-list-hit").text().trim();
-      const link = $(element).find("a").attr("href");
+    $(".board-row").each((index, element) => {
+      const $element = $(element);
+
+      const category = $element.find(".category_icon").text().trim();
+      const title = $element.find(".title.new-ellip").text().trim();
+      const author = $element.find(".nick").text().trim();
+      const createdAt = $element.find(".time").text().trim();
+      const likes = parseInt($element.find(".like .data").text().trim()) || 0;
+      const comments = parseInt($element.find(".comment .data").text().trim()) || 0;
+      const link = "https://boardlife.co.kr" + $element.attr("href");
 
       posts.push({
         id: index + 1,
+        category,
         title,
         author,
-        createdAt: date,
-        views: parseInt(views) || 0,
-        link: `https://boardlife.co.kr${link}`,
+        createdAt,
+        views: comments, // 실제 조회수 데이터가 없어서 임시로 댓글 수로 대체
+        likes,
+        comments,
+        link,
       });
     });
 

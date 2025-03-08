@@ -1,5 +1,4 @@
 import { Post } from "@/types/board";
-import dayjs from "dayjs";
 import "dayjs/locale/ko";
 
 async function getPosts() {
@@ -28,6 +27,9 @@ export default async function PostsPage() {
                       번호
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      카테고리
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       제목
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -36,8 +38,11 @@ export default async function PostsPage() {
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       작성일
                     </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      조회수
+                    <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      좋아요
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      댓글
                     </th>
                   </tr>
                 </thead>
@@ -45,6 +50,11 @@ export default async function PostsPage() {
                   {posts.map((post: Post) => (
                     <tr key={post.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          {post.category}
+                        </span>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <a
                           href={post.link}
@@ -56,10 +66,9 @@ export default async function PostsPage() {
                         </a>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.author}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {dayjs(post.createdAt).locale("ko").format("YYYY.MM.DD")}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.views}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{post.createdAt}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{post.likes}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{post.comments}</td>
                     </tr>
                   ))}
                 </tbody>
