@@ -88,9 +88,7 @@ export default function PostList({ initialPosts }: PostListProps) {
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               카테고리
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider thumbnail-column">
-              썸네일
-            </th>
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider thumbnail-column"></th>
             <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               제목
             </th>
@@ -134,7 +132,12 @@ export default function PostList({ initialPosts }: PostListProps) {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <a href={post.link} className="post-link text-blue-600 hover:text-blue-900">
+                <a
+                  href={post.link}
+                  className="post-link text-blue-600 hover:text-blue-900"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {post.title}
                   {post.comments > 0 && <span className="ml-2 text-sm">[{post.comments}]</span>}
                 </a>

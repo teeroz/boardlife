@@ -25,8 +25,8 @@ export async function GET(request: Request) {
 
       const category = $element.find(".category_icon").text().trim();
 
-      // "스폰" 카테고리 제외
-      if (category === "스폰") {
+      // "스폰", "영상" 카테고리 제외
+      if (category === "스폰" || category === "영상") {
         return;
       }
 
