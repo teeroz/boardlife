@@ -1,7 +1,8 @@
 "use client";
 
 import { Post } from "@/types/board";
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface PostListProps {
   initialPosts: Post[];
@@ -11,9 +12,37 @@ export default function PostList({ initialPosts }: PostListProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [visitedLinks, setVisitedLinks] = useState<Set<string>>(new Set());
   const loadingRef = useRef<HTMLDivElement>(null);
 
-  const loadMorePosts = async () => {
+  // 방문한 링크 로드
+  useEffect(() => {
+    try {
+      const savedVisitedLinks = localStorage.getItem("boardlife-visited-links");
+      if (savedVisitedLinks) {
+        setVisitedLinks(new Set(JSON.parse(savedVisitedLinks)));
+      }
+    } catch (error) {
+      console.error("방문 기록을 불러오는 중 오류 발생:", error);
+    }
+  }, []);
+
+  // 링크 클릭 핸들러
+  const handleLinkClick = useCallback(
+    (link: string) => {
+      try {
+        const newVisitedLinks = new Set(visitedLinks);
+        newVisitedLinks.add(link);
+        setVisitedLinks(newVisitedLinks);
+        localStorage.setItem("boardlife-visited-links", JSON.stringify(Array.from(newVisitedLinks)));
+      } catch (error) {
+        console.error("방문 기록을 저장하는 중 오류 발생:", error);
+      }
+    },
+    [visitedLinks]
+  );
+
+  const loadMorePosts = useCallback(async () => {
     if (loading) return;
 
     try {
@@ -31,7 +60,7 @@ export default function PostList({ initialPosts }: PostListProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, loading]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -48,7 +77,7 @@ export default function PostList({ initialPosts }: PostListProps) {
     }
 
     return () => observer.disconnect();
-  }, [currentPage, loading]);
+  }, [loadMorePosts]);
 
   return (
     <div className="overflow-x-auto">
@@ -80,6 +109,7 @@ export default function PostList({ initialPosts }: PostListProps) {
           height: 45px;
           margin: 0 auto;
           display: block;
+          position: relative;
         }
         .author-column {
           width: 100px !important;
@@ -131,14 +161,20 @@ export default function PostList({ initialPosts }: PostListProps) {
               <td className="px-6 py-4 whitespace-nowrap text-center thumbnail-column">
                 <div className="thumbnail-container">
                   {post.thumbnailUrl ? (
-                    <img
+                    <Image
                       src={post.thumbnailUrl}
                       alt="게임 썸네일"
-                      className="thumbnail-img rounded border border-gray-200 shadow-sm"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = "none";
+                      width={45}
+                      height={45}
+                      className="rounded border border-gray-200 shadow-sm"
+                      style={{ objectFit: "cover" }}
+                      onError={() => {
+                        const img = document.querySelector(
+                          `img[alt="게임 썸네일"][src="${post.thumbnailUrl}"]`
+                        ) as HTMLImageElement;
+                        if (img) img.style.display = "none";
                       }}
+                      unoptimized
                     />
                   ) : (
                     <div className="thumbnail-img rounded border border-gray-200 bg-gray-100"></div>
@@ -148,9 +184,14 @@ export default function PostList({ initialPosts }: PostListProps) {
               <td className="px-6 py-4 whitespace-nowrap">
                 <a
                   href={post.link}
-                  className="post-link text-blue-600 hover:text-blue-900"
+                  className={
+                    visitedLinks.has(post.link)
+                      ? "text-gray-500 hover:text-gray-700"
+                      : "text-blue-600 hover:text-blue-900"
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => handleLinkClick(post.link)}
                 >
                   {post.title}
                   {post.comments > 0 && <span className="ml-2 text-sm">[{post.comments}]</span>}
