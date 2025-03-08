@@ -14,7 +14,7 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
     networks:
       - boardlife_network
-      - infra-local
+      - infra_infra-local
     volumes:
       - ./node_modules:/app/node_modules
       - ./.next:/app/.next
@@ -38,5 +38,5 @@ services:
 networks:
   boardlife_network:
     driver: bridge
-  infra-local:
+  infra_infra-local:
     external: true 
