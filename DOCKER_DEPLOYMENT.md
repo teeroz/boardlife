@@ -33,7 +33,8 @@ sudo systemctl reload nginx  # 또는 적절한 Nginx 재시작 명령어
 ### 3. 도커 이미지 빌드 및 컨테이너 실행
 
 ```bash
-docker-compose up -d --build
+# 프로젝트 이름을 지정하여 실행 (컨테이너 이름 충돌 방지)
+docker-compose -p boardlife up -d --build
 ```
 
 이 명령은 Boardlife Next.js 애플리케이션(boardlife-nextjs)을 빌드하고 백그라운드에서 실행합니다.
@@ -43,7 +44,12 @@ docker-compose up -d --build
 만약 새로 생성된 컨테이너가 'infra-local' 네트워크에 자동으로 연결되지 않은 경우:
 
 ```bash
+# 컨테이너 이름은 프로젝트 이름에 따라 다를 수 있습니다
 docker network connect infra-local boardlife_boardlife-nextjs_1
+
+# 또는 실제 컨테이너 이름 확인 후 연결
+docker ps
+docker network connect infra-local <컨테이너_이름>
 ```
 
 ### 5. 서비스 확인
@@ -55,28 +61,32 @@ docker network connect infra-local boardlife_boardlife-nextjs_1
 ### 로그 확인
 
 ```bash
-# Next.js 애플리케이션 로그 확인
-docker-compose logs -f boardlife-nextjs
+# 프로젝트 이름 지정
+docker-compose -p boardlife logs -f boardlife-nextjs
+
+# 또는 컨테이너 ID/이름으로 직접 확인
+docker logs <컨테이너_이름>
 ```
 
 ### 서비스 재시작
 
 ```bash
-# Next.js 애플리케이션 재시작
-docker-compose restart boardlife-nextjs
+# 프로젝트 이름 지정
+docker-compose -p boardlife restart boardlife-nextjs
 ```
 
 ### 컨테이너 중지
 
 ```bash
-docker-compose down
+# 프로젝트 이름 지정
+docker-compose -p boardlife down
 ```
 
 ### 업데이트 배포
 
 ```bash
 git pull
-docker-compose up -d --build
+docker-compose -p boardlife up -d --build
 ```
 
 ## 환경 변수 설정
@@ -108,12 +118,22 @@ docker network inspect infra-local
 
 ```bash
 docker ps
-docker logs boardlife_boardlife-nextjs_1
+docker logs <컨테이너_이름>
 ```
 
 ### 네트워크 연결 문제 해결
 
 ```bash
 # 필요한 경우 네트워크에 수동으로 연결
-docker network connect infra-local boardlife_boardlife-nextjs_1
+docker network connect infra-local <컨테이너_이름>
 ```
+
+### Docker Compose 버전 확인
+
+이 프로젝트는 Docker Compose 최신 버전을 지원하도록 구성되었습니다. 서버의 Docker Compose 버전을 확인하려면:
+
+```bash
+docker-compose --version
+```
+
+낮은 버전의 Docker Compose를 사용 중이라면, 모든 docker-compose 명령에 `-p boardlife` 옵션을 추가해야 합니다.

@@ -1,7 +1,5 @@
 version: '3'
 
-name: boardlife
-
 services:
   boardlife-nextjs:
     build:
@@ -39,7 +37,6 @@ services:
 
 networks:
   boardlife_network:
-    name: boardlife_network
     driver: bridge
   infra-local:
     external: true 
