@@ -176,7 +176,7 @@ export default function PostList({ initialPosts }: PostListProps) {
       <div className="overflow-x-auto">
         <style jsx global>{`
           .post-link:visited {
-            color: #4b5563 !important;
+            color: #6b7280 !important;
           }
           .thumbnail-column {
             width: 65px !important;
@@ -282,13 +282,20 @@ export default function PostList({ initialPosts }: PostListProps) {
                     href={post.link}
                     className={
                       visitedLinks.has(post.link)
-                        ? "text-gray-600 hover:text-gray-800"
+                        ? "text-gray-500 hover:text-gray-600"
                         : "text-blue-600 hover:text-blue-900"
                     }
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => handleLinkClick(post.link)}
                   >
+                    <span
+                      className={`text-xs font-semibold mr-1 ${
+                        visitedLinks.has(post.link) ? "text-gray-400" : "text-blue-600"
+                      }`}
+                    >
+                      [{post.category}]
+                    </span>
                     {post.title}
                     {post.comments > 0 && <span className="ml-2 text-sm">[{post.comments}]</span>}
                   </a>
