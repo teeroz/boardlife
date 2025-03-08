@@ -149,8 +149,9 @@ export default function PostList({ initialPosts }: PostListProps) {
       max-width: 70px !important;
     }
     .category-column {
-      width: 80px !important;
-      max-width: 80px !important;
+      width: 60px !important;
+      min-width: 60px !important;
+      max-width: 60px !important;
     }
     /* 레이아웃 시프트 방지를 위한 추가 스타일 */
     .post-container {
@@ -244,9 +245,9 @@ export default function PostList({ initialPosts }: PostListProps) {
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
-              <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider category-column"></th>
               <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider thumbnail-column"></th>
-              <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="pl-4 pr-2 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider category-column"></th>
+              <th className="pl-0 pr-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 제목
               </th>
               <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider author-column">
@@ -266,11 +267,6 @@ export default function PostList({ initialPosts }: PostListProps) {
           <tbody className="bg-white divide-y divide-gray-200">
             {posts.map((post: Post) => (
               <tr key={post.id} className="hover:bg-gray-50 post-row">
-                <td className="px-6 py-4 whitespace-nowrap category-column">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                    {post.category}
-                  </span>
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center thumbnail-column">
                   {post.thumbnailUrl && (
                     <div className="thumbnail-container">
@@ -296,7 +292,12 @@ export default function PostList({ initialPosts }: PostListProps) {
                     </div>
                   )}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="pl-4 pr-2 py-4 whitespace-nowrap text-center category-column">
+                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                    {post.category}
+                  </span>
+                </td>
+                <td className="pl-0 pr-6 py-4 whitespace-nowrap">
                   <a
                     href={post.link}
                     className={
