@@ -162,6 +162,17 @@ export default function PostList({ initialPosts }: PostListProps) {
     }
   `;
 
+  // 숫자 형식화 함수 - K, M 형식으로 변경
+  const formatNumber = (num: number): string => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "m";
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+    }
+    return num.toString();
+  };
+
   // 모바일 카드 레이아웃 렌더링
   const renderMobileCards = () => {
     return (
@@ -226,8 +237,8 @@ export default function PostList({ initialPosts }: PostListProps) {
             </div>
 
             <div className="flex justify-between text-xs text-gray-500 mt-2 border-t pt-2">
-              <div>👍 {post.likes}</div>
-              <div>👁️ {post.views}</div>
+              <div>👍 {formatNumber(post.likes)}</div>
+              <div>👁️ {formatNumber(post.views)}</div>
             </div>
           </div>
         ))}
@@ -340,10 +351,10 @@ export default function PostList({ initialPosts }: PostListProps) {
                   {post.createdAt}
                 </td>
                 <td className="px-0 py-4 whitespace-nowrap text-sm text-gray-500 text-center number-column">
-                  {post.likes}
+                  {formatNumber(post.likes)}
                 </td>
                 <td className="px-0 py-4 whitespace-nowrap text-sm text-gray-500 text-center number-column">
-                  {post.views}
+                  {formatNumber(post.views)}
                 </td>
               </tr>
             ))}
