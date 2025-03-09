@@ -245,21 +245,21 @@ export default function PostList({ initialPosts }: PostListProps) {
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
-              <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider thumbnail-column"></th>
-              <th className="pl-4 pr-2 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider category-column"></th>
+              <th className="px-2 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider thumbnail-column"></th>
+              <th className="pl-0 pr-2 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider category-column"></th>
               <th className="pl-0 pr-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 제목
               </th>
-              <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider author-column">
+              <th className="px-0 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider author-column">
                 작성자
               </th>
-              <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider date-column">
+              <th className="px-0 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider date-column">
                 작성일
               </th>
-              <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider number-column">
+              <th className="px-0 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider number-column">
                 LIKE
               </th>
-              <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider number-column">
+              <th className="px-0 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider number-column">
                 READ
               </th>
             </tr>
@@ -267,7 +267,7 @@ export default function PostList({ initialPosts }: PostListProps) {
           <tbody className="bg-white divide-y divide-gray-200">
             {posts.map((post: Post) => (
               <tr key={post.id} className="hover:bg-gray-50 post-row">
-                <td className="px-6 py-4 whitespace-nowrap text-center thumbnail-column">
+                <td className="px-2 py-4 whitespace-nowrap text-center thumbnail-column">
                   {post.thumbnailUrl && (
                     <div className="thumbnail-container">
                       <Image
@@ -292,7 +292,7 @@ export default function PostList({ initialPosts }: PostListProps) {
                     </div>
                   )}
                 </td>
-                <td className="pl-4 pr-2 py-4 whitespace-nowrap text-center category-column">
+                <td className="pl-0 pr-2 py-4 whitespace-nowrap text-center category-column">
                   <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                       post.category === "자게"
@@ -333,16 +333,16 @@ export default function PostList({ initialPosts }: PostListProps) {
                     {post.comments > 0 && <span className="ml-2 text-sm">[{post.comments}]</span>}
                   </a>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center author-column">
+                <td className="px-0 py-4 whitespace-nowrap text-sm text-gray-500 text-center author-column">
                   <div className="truncate max-w-[100px] mx-auto">{post.author}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center date-column">
+                <td className="px-0 py-4 whitespace-nowrap text-sm text-gray-500 text-center date-column">
                   {post.createdAt}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center number-column">
+                <td className="px-0 py-4 whitespace-nowrap text-sm text-gray-500 text-center number-column">
                   {post.likes}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center number-column">
+                <td className="px-0 py-4 whitespace-nowrap text-sm text-gray-500 text-center number-column">
                   {post.views}
                 </td>
               </tr>
