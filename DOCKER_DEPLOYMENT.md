@@ -34,7 +34,7 @@ sudo systemctl reload nginx  # 또는 적절한 Nginx 재시작 명령어
 
 ```bash
 # 프로젝트 이름을 지정하여 실행 (컨테이너 이름 충돌 방지)
-docker-compose -p boardlife up -d --build
+docker-compose up -d --build
 ```
 
 이 명령은 Next.js 애플리케이션(nextjs)을 빌드하고 백그라운드에서 실행합니다.
@@ -45,7 +45,7 @@ docker-compose -p boardlife up -d --build
 
 ```bash
 # 컨테이너 이름은 프로젝트 이름에 따라 다를 수 있습니다
-docker network connect infra_infra-local boardlife_nextjs_1
+docker network connect infra_infra-local boardlife_nextjs
 
 # 또는 실제 컨테이너 이름 확인 후 연결
 docker ps
@@ -62,7 +62,7 @@ docker network connect infra_infra-local <컨테이너_이름>
 
 ```bash
 # 프로젝트 이름 지정
-docker-compose -p boardlife logs -f nextjs
+docker-compose logs -f boardlife_nextjs
 
 # 또는 컨테이너 ID/이름으로 직접 확인
 docker logs <컨테이너_이름>
@@ -72,21 +72,21 @@ docker logs <컨테이너_이름>
 
 ```bash
 # 프로젝트 이름 지정
-docker-compose -p boardlife restart nextjs
+docker-compose restart boardlife_nextjs
 ```
 
 ### 컨테이너 중지
 
 ```bash
 # 프로젝트 이름 지정
-docker-compose -p boardlife down
+docker-compose down
 ```
 
 ### 업데이트 배포
 
 ```bash
 git pull
-docker-compose -p boardlife up -d --build
+docker-compose up -d --build
 ```
 
 ## 환경 변수 설정
