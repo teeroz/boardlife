@@ -349,7 +349,6 @@ export default function PostList({ initialPosts }: PostListProps) {
                       </span>
                       {post.title}
                       {post.comments > 0 && <span className="ml-1 text-xs">[{post.comments}]</span>}
-                      {isLastVisited && <span className="ml-2 text-xs text-red-600 inline-block">마지막 방문</span>}
                     </a>
                   </div>
 
@@ -475,7 +474,6 @@ export default function PostList({ initialPosts }: PostListProps) {
                     >
                       {post.title}
                       {post.comments > 0 && <span className="ml-2 text-sm">[{post.comments}]</span>}
-                      {isLastVisited && <span className="ml-2 text-xs text-red-600 inline-block">마지막 방문</span>}
                     </a>
                   </td>
                   <td className="px-0 py-4 whitespace-nowrap text-sm text-gray-500 text-center author-column">
@@ -502,7 +500,6 @@ export default function PostList({ initialPosts }: PostListProps) {
   return (
     <div className="post-container">
       <div className="header-container">
-        <div className="text-lg font-bold">게시물 목록</div>
         {lastVisitedLink && !findingLastVisited && (
           <button className="last-visited-button" onClick={scrollToLastVisited}>
             마지막 방문글로 이동
