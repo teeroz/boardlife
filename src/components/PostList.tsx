@@ -145,6 +145,17 @@ export default function PostList({ initialPosts }: PostListProps) {
 
     // 이미 로드된 게시물에서 먼저 찾기
     let foundPost = findPostInList(posts);
+    if (foundPost) {
+      // 이미 찾았다면 바로 해당 위치로 스크롤
+      setTimeout(() => {
+        const postElement = postRefs.current.get(lastVisitedLink);
+        if (postElement) {
+          postElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 100);
+      setFindingLastVisited(false);
+      return;
+    }
 
     // 찾지 못했다면 최대 30페이지까지 추가 로드하며 찾기
     let loadCount = 0;
@@ -159,13 +170,26 @@ export default function PostList({ initialPosts }: PostListProps) {
 
       if (!result.hasMore || result.newPosts.length === 0) break; // 더 이상 로드할 게시물이 없으면 중단
 
+      // 새로 로드된 페이지의 마지막 게시물로 스크롤
+      if (result.newPosts.length > 0) {
+        // State 업데이트가 반영될 때까지 잠시 대기
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // 새로 로드된 마지막 게시물로 스크롤
+        const lastNewPost = result.newPosts[result.newPosts.length - 1];
+        const lastPostElement = document.querySelector(`[data-post-id="${lastNewPost.id}"]`);
+        if (lastPostElement) {
+          lastPostElement.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+      }
+
       // 새로 로드된 게시물 배열에서 찾기
       foundPost = findPostInList(result.newPosts);
 
       // 찾은 경우 해당 게시물의 element 참조 기다리기
       if (foundPost) {
         // state 업데이트 및 렌더링을 기다리기 위한 짧은 지연
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 300));
         break;
       }
 
@@ -347,6 +371,7 @@ export default function PostList({ initialPosts }: PostListProps) {
                 isLastVisited ? "border-l-4 border-red-500 bg-red-50" : ""
               }`}
               ref={(el) => registerPostRef(post.link, el)}
+              data-post-id={post.id}
             >
               <div className="flex mb-3">
                 {post.thumbnailUrl && (
@@ -459,6 +484,7 @@ export default function PostList({ initialPosts }: PostListProps) {
                   key={post.id}
                   className={`hover:bg-gray-50 post-row ${isLastVisited ? "border-l-4 border-red-500 bg-red-50" : ""}`}
                   ref={(el) => registerPostRef(post.link, el)}
+                  data-post-id={post.id}
                 >
                   <td className="px-2 py-4 whitespace-nowrap text-center thumbnail-column">
                     {post.thumbnailUrl && (
