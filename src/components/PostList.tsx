@@ -265,9 +265,10 @@ export default function PostList({ initialPosts }: PostListProps) {
     }
     .header-container {
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-end !important;
       align-items: center;
       margin-bottom: 1rem;
+      width: 100%;
     }
     
     /* 모바일 스타일 */
@@ -285,6 +286,8 @@ export default function PostList({ initialPosts }: PostListProps) {
         text-align: center;
         position: relative;
         overflow: hidden;
+        right: 0;
+        margin-left: auto !important;
       }
       
       .last-visited-button::after {
@@ -313,6 +316,9 @@ export default function PostList({ initialPosts }: PostListProps) {
         padding-right: 0.5rem;
         margin-top: 0.75rem;
         margin-bottom: 0.75rem;
+        justify-content: flex-end !important;
+        align-items: flex-end !important;
+        flex-direction: row !important;
       }
     }
   `;
@@ -543,15 +549,31 @@ export default function PostList({ initialPosts }: PostListProps) {
     );
   };
 
+  const MobileButton = () => {
+    if (!lastVisitedLink || findingLastVisited) return null;
+
+    return (
+      <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
+        <button className="last-visited-button" onClick={scrollToLastVisited} aria-label="마지막 방문글로 이동">
+          마지막 방문글
+        </button>
+      </div>
+    );
+  };
+
   return (
     <div className="post-container">
-      <div className="header-container">
-        {lastVisitedLink && !findingLastVisited && (
-          <button className="last-visited-button" onClick={scrollToLastVisited} aria-label="마지막 방문글로 이동">
-            {isMobile ? "마지막 방문글" : "마지막 방문글로 이동"}
-          </button>
-        )}
-      </div>
+      {isMobile ? (
+        <MobileButton />
+      ) : (
+        <div className="header-container">
+          {lastVisitedLink && !findingLastVisited && (
+            <button className="last-visited-button" onClick={scrollToLastVisited} aria-label="마지막 방문글로 이동">
+              마지막 방문글로 이동
+            </button>
+          )}
+        </div>
+      )}
 
       {mounted && (isMobile ? renderMobileCards() : renderDesktopTable())}
       <div ref={loadingRef} className="py-4 text-center">
