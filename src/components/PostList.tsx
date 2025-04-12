@@ -269,6 +269,52 @@ export default function PostList({ initialPosts }: PostListProps) {
       align-items: center;
       margin-bottom: 1rem;
     }
+    
+    /* 모바일 스타일 */
+    @media (max-width: 767px) {
+      .last-visited-button {
+        background-color: #e11d48;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(225, 29, 72, 0.25);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .last-visited-button::after {
+        content: '→';
+        margin-left: 5px;
+        font-weight: bold;
+      }
+      
+      .last-visited-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+        pointer-events: none;
+      }
+      
+      .last-visited-button:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 3px rgba(225, 29, 72, 0.2);
+      }
+      
+      .header-container {
+        padding-right: 0.5rem;
+        margin-top: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+    }
   `;
 
   // 숫자 형식화 함수 - K, M 형식으로 변경
@@ -501,8 +547,8 @@ export default function PostList({ initialPosts }: PostListProps) {
     <div className="post-container">
       <div className="header-container">
         {lastVisitedLink && !findingLastVisited && (
-          <button className="last-visited-button" onClick={scrollToLastVisited}>
-            마지막 방문글로 이동
+          <button className="last-visited-button" onClick={scrollToLastVisited} aria-label="마지막 방문글로 이동">
+            {isMobile ? "마지막 방문글" : "마지막 방문글로 이동"}
           </button>
         )}
       </div>
