@@ -1,7 +1,6 @@
 import { Post } from "@/types/board";
 import axios from "axios";
 import * as cheerio from "cheerio";
-import iconv from "iconv-lite";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -9,13 +8,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get("page") || "1";
 
-    const response = await axios.get(`https://boardlife.co.kr/board/new/전체/${page}`, {
-      responseType: "arraybuffer",
-      responseEncoding: "binary",
-    });
-
-    const html = iconv.decode(Buffer.from(response.data), "euc-kr");
-    const $ = cheerio.load(html);
+    const response = await axios.get(`https://boardlife.co.kr/board/new/전체/${page}`);
+    const $ = cheerio.load(response.data);
 
     const posts: Post[] = [];
 

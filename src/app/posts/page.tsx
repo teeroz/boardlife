@@ -7,7 +7,7 @@ async function getPosts() {
 
   // 개발 환경에서는 기본 URL 설정
   if (!baseUrl) {
-    baseUrl = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://boardlife.teeroz.net";
+    baseUrl = process.env.NODE_ENV === "development" ? "http://localhost:3001" : "https://boardlife.teeroz.net";
   }
 
   // URL에 마지막 슬래시가 있다면 제거
