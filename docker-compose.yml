@@ -3,6 +3,7 @@ version: "3"
 services:
   nextjs:
     container_name: boardlife_nextjs
+    image: boardlife:latest
     build:
       context: .
       dockerfile: Dockerfile
