@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = searchParams.get("page") || "1";
 
-    const response = await axios.get(`https://boardlife.co.kr/board/new/전체/${page}`);
+    const response = await axios.get(`https://boardlife.co.kr/board/new/${page}`);
     const $ = cheerio.load(response.data);
 
     const posts: Post[] = [];
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       const author = $element.find(".nick").text().trim();
       const createdAt = $element.find(".time").text().trim();
       const likes = parseInt($element.find(".like .data").text().trim().replace(/,/g, "")) || 0;
-      const views = parseInt($element.find(".comment .data").text().trim().replace(/,/g, "")) || 0;
+      const comments = parseInt($element.find(".comment .data").text().trim().replace(/,/g, "")) || 0;
       const link = "https://boardlife.co.kr" + $element.attr("href")?.replace(/&pg=\d+/, "");
 
       // 썸네일 이미지 URL 추출
@@ -42,23 +42,13 @@ export async function GET(request: Request) {
         }
       }
 
-      // 댓글 수 추출
-      let comments = 0;
-      const commentCountText = $element.find(".comment-count").text().trim();
-      if (commentCountText) {
-        const commentMatch = commentCountText.match(/\[(\d+)\]/);
-        if (commentMatch) {
-          comments = parseInt(commentMatch[1]);
-        }
-      }
-
       posts.push({
         id: `${page}-${posts.length + 1}`,
         category,
         title,
         author,
         createdAt,
-        views,
+        views: 0,
         likes,
         comments,
         link,
