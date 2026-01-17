@@ -1,7 +1,6 @@
 "use client";
 
 import { Post } from "@/types/board";
-import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 interface PostListProps {
