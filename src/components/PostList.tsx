@@ -376,24 +376,18 @@ export default function PostList({ initialPosts }: PostListProps) {
               <div className="flex mb-3">
                 {post.thumbnailUrl && (
                   <div className="mr-3 flex-shrink-0 w-12 h-12 relative overflow-hidden rounded border border-gray-200 shadow-sm">
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={post.thumbnailUrl}
                       alt="게임 썸네일"
-                      fill
-                      className="rounded"
-                      style={{
-                        objectFit: "cover",
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                      }}
+                      className="rounded absolute top-0 left-0 w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         if (target.parentElement) {
                           target.parentElement.style.display = "none";
                         }
                       }}
-                      unoptimized
                     />
                   </div>
                 )}
@@ -489,7 +483,8 @@ export default function PostList({ initialPosts }: PostListProps) {
                   <td className="px-2 py-4 whitespace-nowrap text-center thumbnail-column">
                     {post.thumbnailUrl && (
                       <div className="thumbnail-container">
-                        <Image
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
                           src={post.thumbnailUrl}
                           alt="게임 썸네일"
                           width={45}
@@ -500,13 +495,13 @@ export default function PostList({ initialPosts }: PostListProps) {
                             width: "45px",
                             height: "45px",
                           }}
+                          referrerPolicy="no-referrer"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             if (target.parentElement) {
                               target.parentElement.style.display = "none";
                             }
                           }}
-                          unoptimized
                         />
                       </div>
                     )}
