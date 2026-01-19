@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       const author = $element.find(".nick").text().trim();
       const createdAt = $element.find(".time").text().trim();
       const likes = parseInt($element.find(".like .data").text().trim().replace(/,/g, "")) || 0;
-      const comments = parseInt($element.find(".comment .data").text().trim().replace(/,/g, "")) || 0;
+      const comments = parseInt($element.find(".comment-count").text().trim().replace(/[\[\]]/g, "").replace(/,/g, "")) || 0;
       const link = "https://boardlife.co.kr" + $element.attr("href")?.replace(/&pg=\d+/, "");
 
       // 썸네일 이미지 URL 추출
